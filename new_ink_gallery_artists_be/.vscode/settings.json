@@ -1,0 +1,9 @@
+{
+    "flake8.args": [
+        "--max-line-length", "252"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "--cache-clear"
+    ]
+}

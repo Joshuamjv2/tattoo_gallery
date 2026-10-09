@@ -1,0 +1,236 @@
+[
+  {
+    "id": 9999916,
+    "customer": "4426868",
+    "location": "17628",
+    "staff": "17642",
+    "service": "27244",
+    "template": "39617",
+    "label": null,
+    "length": 180,
+    "date": "12/20/2025 15:30",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "$100 dep paid\r\nFloral \r\nButterfly\r\nHumming bird \r\nFineline \r\nArm\r\n4-5 inches\r\nBooked through text",
+    "external_source_id": null
+  },
+  {
+    "id": 9999139,
+    "customer": "4906062",
+    "location": "17628",
+    "staff": "17642",
+    "service": "27244",
+    "template": "39617",
+    "label": null,
+    "length": 30,
+    "date": "06/02/2025 12:30",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "$50 dep paid \r\nMagic within \r\nFlash sheet\r\n$150 balance \r\nBooked through text",
+    "external_source_id": null
+  },
+  {
+    "id": 9998744,
+    "customer": "4656526",
+    "location": "17628",
+    "staff": "17642",
+    "service": null,
+    "template": "39617",
+    "label": null,
+    "length": 90,
+    "date": "06/06/2025 11:15",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "$50’depnpaid\r\n$100 total\r\nTooth gem\r\nAsh_leighhhh19",
+    "external_source_id": null
+  },
+  {
+    "id": 9996717,
+    "customer": "3133818",
+    "location": null,
+    "staff": "17642",
+    "service": null,
+    "template": "67782",
+    "label": null,
+    "length": 480,
+    "date": "06/06/2025 12:00",
+    "recurring_rule": "RRULE:FREQ=WEEKLY",
+    "local_template": null,
+    "notes": null,
+    "external_source_id": null
+  },
+  {
+    "id": 9994783,
+    "customer": "4125047",
+    "location": "17628",
+    "staff": "17642",
+    "service": "27246",
+    "template": "39617",
+    "label": null,
+    "length": 60,
+    "date": "07/09/2025 15:30",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "50 dep paid\r\nTattoo touch ups",
+    "external_source_id": null
+  },
+  {
+    "id": 9992363,
+    "customer": "3133818",
+    "location": null,
+    "staff": "17642",
+    "service": null,
+    "template": "67782",
+    "label": null,
+    "length": 480,
+    "date": "06/05/2025 12:00",
+    "recurring_rule": "RRULE:FREQ=WEEKLY",
+    "local_template": null,
+    "notes": null,
+    "external_source_id": null
+  },
+  {
+    "id": 9992255,
+    "customer": "4901649",
+    "location": "17628",
+    "staff": "17642",
+    "service": "27244",
+    "template": "39617",
+    "label": null,
+    "length": 30,
+    "date": "09/17/2025 11:30",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "$50 dep PAID\r\nsisu dainty script flash\r\n$150\r\nBooked through text",
+    "external_source_id": null
+  },
+  {
+    "id": 9990455,
+    "customer": "4184742",
+    "location": "17628",
+    "staff": "17642",
+    "service": "27244",
+    "template": "39617",
+    "label": null,
+    "length": 90,
+    "date": "06/11/2025 15:30",
+    "recurring_rule": null,
+    "local_template": null,
+    "notes": "$50 dep paid. \r\nGolden script\r\nSide neck\r\n$150",
+    "external_source_id": null
+  }
+]
+
+The above array shows fixed appointments for an artist,
+When there is an artist, I need the form to ensure that the times of selectable appointments are limited
+so that we don't have conflicting appointments. Consider both the date and length.
+
+Here is the date selection component:
+
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+// Optional: define a type for clarity
+type AppointmentSlot = {
+  date: Date | null;
+  time: string;
+};
+
+interface Props {
+  artist?: string
+}
+
+export default function DateAppointments({artist}: Props) {
+  const [appointmentDates, setAppointmentDates] = useState<AppointmentSlot[]>([
+    { date: null, time: "" },
+    { date: null, time: "" },
+    { date: null, time: "" },
+  ]);
+
+  console.log(artist)
+
+  // Time slots from 12PM to 7PM in 30-minute increments
+  const timeSlots = [
+    "12:00 PM", "12:30 PM",
+    "1:00 PM", "1:30 PM",
+    "2:00 PM", "2:30 PM",
+    "3:00 PM", "3:30 PM",
+    "4:00 PM", "4:30 PM",
+    "5:00 PM", "5:30 PM",
+    "6:00 PM", "6:30 PM",
+    "7:00 PM"
+  ];
+
+  // Only allow weekdays
+  const isWeekday = (date: Date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+  };
+
+  // Update a date
+  const handleDateChange = (date: Date | null, index: number) => {
+    const newDates = [...appointmentDates];
+    newDates[index].date = date;
+    setAppointmentDates(newDates);
+  };
+
+  // Update a time
+  const handleTimeChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    index: number
+  ) => {
+    const newDates = [...appointmentDates];
+    newDates[index].time = e.target.value;
+    setAppointmentDates(newDates);
+  };
+
+  return (
+    <div className="mt-2">
+      <div className="rounded border px-2 py-1 border-black shadow text-center w-[12rem] mb-3 text-sm font-semibold">
+        <h3>Propose three dates</h3>
+      </div>
+      <div className="space-y-4">
+        {appointmentDates.map((slot, index) => (
+          <div key={index} className="flex flex-col sm:flex-row gap-2">
+            {/* Date Picker */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-2">Date {index + 1}</label>
+              <DatePicker
+                selected={slot.date}
+                onChange={(date) => handleDateChange(date, index)}
+                filterDate={isWeekday}
+                minDate={new Date()}
+                className="w-full border shadow px-4 py-2 rounded bg-white"
+                placeholderText="Select a date"
+                dateFormat="MMMM d, yyyy"
+              />
+            </div>
+
+            {/* Time Picker */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-2">Time {index + 1}</label>
+              <select
+                className="w-full border shadow px-4 py-2 rounded bg-white"
+                value={slot.time}
+                onChange={(e) => handleTimeChange(e, index)}
+                disabled={!slot.date}
+              >
+                <option value="">{slot.date ? "Select time" : "Select date first"}</option>
+                {timeSlots.map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-sm text-gray-500 mt-4">
+        Available Monday–Friday, 12PM–7PM (weekends automatically excluded)
+      </p>
+    </div>
+  );
+}

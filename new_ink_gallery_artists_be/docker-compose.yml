@@ -1,0 +1,54 @@
+services:
+  fastapi-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: fastapi-app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi-app.rule=Host(`api.inkgallerytattoostudio.com`)"
+      - "traefik.http.routers.fastapi-app.entrypoints=websecure"
+      - "traefik.http.routers.fastapi-app.tls.certresolver=myresolver"
+      - "traefik.http.services.fastapi-app.loadbalancer.server.port=8000"
+      - "traefik.http.services.fastapi-app.loadbalancer.server.scheme=http"
+      - "traefik.http.middlewares.compress.compress=true"
+      - "traefik.http.routers.fastapi-app.middlewares=compress"
+    networks:
+      - traefik
+      - app-network
+    restart: always
+
+  db:
+    image: postgres:15.1-alpine
+    container_name: db
+    env_file:
+      - .env
+    environment:
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  traefik:
+    external: true
+  app-network:
+    driver: bridge

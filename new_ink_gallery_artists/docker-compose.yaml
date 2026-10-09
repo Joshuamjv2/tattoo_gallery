@@ -1,0 +1,49 @@
+services:
+  reverse-proxy:
+    image: traefik:v3.1
+    container_name: reverse-proxy
+    command:
+      - "--accesslog=true"
+      - "--providers.docker"
+      - "--api.dashboard=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--providers.docker.exposedbydefault=false"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=joshuamjv22@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+    restart: always
+
+
+  vite-app:
+    build: .
+    container_name: vite-app
+    expose:
+      - "4173"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vite-app.rule=Host(`app.inkgallerytattoostudio.com`)"
+      - "traefik.http.services.vite-app.loadbalancer.server.port=4173"
+      - "traefik.http.routers.vite-app.entrypoints=websecure"
+      - "traefik.http.routers.vite-app.tls.certresolver=myresolver"
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik
+
+volumes:
+  letsencrypt:
+
+networks:
+  traefik:
+    external: true

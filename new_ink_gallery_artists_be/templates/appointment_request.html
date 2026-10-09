@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Ink Gallery - Appointment Request</title>
+    <style>
+        /* Basic responsive rules */
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+
+            .button {
+                width: 100% !important;
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background: #fff; font-family: Arial, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+        <tr>
+            <td align="center" style="padding: 20px 10px;">
+                <table class="container" width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width: 600px; background-color: #ffffff; margin: 0 auto; padding: 20px; border: 1px solid #eee;">
+
+                    <!-- Logo -->
+                    <tr>
+                        <td align="center" style="padding: 15px;">
+                            <img src="http://srv825831.hstgr.cloud:4173/images/logo-black.png" alt="Logo" width="50"
+                                style="display: block;" />
+                        </td>
+                    </tr>
+
+                    <!-- Heading -->
+                    <tr>
+                        <td align="center">
+                            <h3 style="margin: 0; color: #000;">New Appointment Request</h3>
+                        </td>
+                    </tr>
+
+                    <!-- Body content -->
+                    <tr>
+                        <td align="center" style="padding: 20px; color: #344054; font-size: 14px;">
+                            <p style="margin-bottom: 10px;">A new appointment request has been made by
+                                <strong>{{name}}</strong>.</p>
+                            <p style="margin: 0;">Email: {{email}}</p>
+                            <p style="margin: 0;">Phone: {{phone}}</p>
+                            <p style="margin: 0;">Contact by: {{contact_method}}</p>
+                            <p style="margin: 0;">Requested Artist: {{artist}}</p>
+                            <p style="margin-top: 10px; font-style: italic;">“{{notes}}”</p>
+                        </td>
+                    </tr>
+
+                    <!-- Optional Approve Button -->
+                    <!--
+          <tr>
+            <td align="center" style="padding-top: 20px;">
+              <a href="{{ link }}" class="button" style="text-decoration: none;">
+                <table cellpadding="0" cellspacing="0" border="0" style="background-color: #000; border-radius: 8px;">
+                  <tr>
+                    <td align="center" style="padding: 10px 20px; font-size: 14px; color: #fff;">
+                      Approve
+                    </td>
+                  </tr>
+                </table>
+              </a>
+            </td>
+          </tr>
+          -->
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

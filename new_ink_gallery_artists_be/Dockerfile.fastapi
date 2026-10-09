@@ -1,0 +1,28 @@
+FROM python:3.10-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Install required system packages
+RUN apt update && apt install -y \
+    libpq-dev \
+    gcc \
+    && apt clean && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy source code and script
+COPY / ./
+
+# Make sure your start.sh has executable permissions
+RUN chmod +x /app/start.sh
+
+# Set PYTHONPATH
+ENV PYTHONPATH=/app
+
+EXPOSE 8000
+
+# Run the script
+CMD ["./start.sh"]
